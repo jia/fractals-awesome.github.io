@@ -1,16 +1,28 @@
 'use strict';
 
-app.controller('MandelbrotController', ['$scope', function($scope) {
+app.controller('MandelbrotController', ['$scope','$timeout', 'usSpinnerService', function($scope, $timeout, usSpinnerService) {
+    $scope.threadData = [];
+    $scope.viewThreadInfo = false;
+    $scope.isWorkEnded = false;
+    $scope.downloadPicture = false;
+    $scope.fractalLink = "";
 
-	$scope.leftCorner = 0;
-	$scope.rightCorner = 0;
+    $scope.drawSet = function() {
+        if (typeof mandelbrotObj !== 'undefined') {
+            $scope.mObj = mandelbrotObj;
+        };
+    };
 
-	$scope.drawSet = function () {
-		if (typeof mandelbrotObj !== 'undefined') {
-			$scope.mObj = mandelbrotObj;
-			$scope.leftCorner = mandelbrotObj.downLeftCorner.toString();
-			$scope.rightCorner = mandelbrotObj.upRightCorner.toString();
-		};
-	};
+    $scope.viewThreads = function() {
+        $scope.viewThreadInfo = !$scope.viewThreadInfo;
+    };
 
+    $scope.showStatButton = function(dataUrl) {
+        $timeout(function () {
+            $scope.isWorkEnded = true;
+            $scope.downloadPicture = true;
+            $scope.fractalLink = dataUrl;
+            $scope.fractalName = 'fractal_' + Date.now() + '.png';
+        }, 100);
+    };
 }]);

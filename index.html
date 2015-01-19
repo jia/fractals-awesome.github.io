@@ -5,22 +5,38 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Mandelbrot Set</title>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <script src="bower_components/angular/angular.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="src/app.js"></script>
     <script src="src/architecture.js"></script>
+    <script src="src/ConfigService.js"></script>
+    <script src="src/ThreadService.js"></script>
     <script src="src/MandelbrotController.js"></script>
     <script src="src/MandelbrotDirective.js"></script>
     <style>
-    #canvas {
+    #canvas-layer-1 {
         border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-        background-color: #FFF;
         box-shadow: 9px 9px 20px 5px rgba(0, 0, 0, 0.8);
+    }
+    .overlay {
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        opacity: 0.85;
+        background-color: #333;
+        position: fixed;
     }
     </style>
 </head>
 
 <body ng-controller="MandelbrotController">
+    <div id="lock-container">
+    <div us-spinner spinner-key="spinner-1"></div>
+    </div>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -39,9 +55,12 @@
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="#">Click on canvas to draw Mandelbrot set.</a>
-                    </li>                    
-                    <li>
-                        <a href="#">Current corners : [ {{leftCorner}}, {{rightCorner}} ] </a>
+                    </li>
+                    <li ng-show="isWorkEnded">
+                        <a chart ng-click="viewThreads()">View thread info</a>
+                    </li>
+                    <li ng-show="downloadPicture">
+                        <a href='{{fractalLink}}' download="{{fractalName}}">Download current fractal</a>
                     </li>
                 </ul>
             </div>
@@ -49,9 +68,13 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-    <div class="container-fluid" style="width: 66%">
-        <canvas id="canvas" paint style="margin: 0 auto"> </canvas>
+    <div class="container-fluid">
+        <div style="position: relative;">
+            <canvas id="canvas-layer-1" paint style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+            <canvas ng-show="viewThreadInfo" id="canvas-layer-2" style="position: absolute; left: 1; top: 0; z-index: 1;"></canvas>
+        </div>
     </div>
+
 </body>
 
 </html>
