@@ -7,12 +7,6 @@ app.controller('MandelbrotController', ['$scope','$timeout', 'usSpinnerService',
     $scope.downloadPicture = false;
     $scope.fractalLink = "";
 
-    $scope.drawSet = function() {
-        if (typeof mandelbrotObj !== 'undefined') {
-            $scope.mObj = mandelbrotObj;
-        };
-    };
-
     $scope.viewThreads = function() {
         $scope.viewThreadInfo = !$scope.viewThreadInfo;
     };

@@ -7,7 +7,7 @@ app.service('ThreadService', ['$rootScope', 'ConfigService', function($rootScope
     var poolSize = Math.ceil(ConfigService.ctx_w / x_pixels);
 
     self.work = function() {
-
+        threadDataInfo = [];
         // Paint new line on canvas
         var fillLine = function(data) {
             var result = data.result;
@@ -31,6 +31,9 @@ app.service('ThreadService', ['$rootScope', 'ConfigService', function($rootScope
                 'count': x_pixels,
                 'width': ConfigService.ctx_w,
                 'height': ConfigService.ctx_h,
+                'isZoom': ConfigService.isAlreadyDraw,
+                'mX': ConfigService.mouseClickX,
+                'mY': ConfigService.mouseClickY
             };
             // Start a new thread
             worker.postMessage(data);

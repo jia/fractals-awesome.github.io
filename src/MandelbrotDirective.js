@@ -11,11 +11,16 @@ app.directive('paint', ['$rootScope', 'ThreadService', 'ConfigService', 'usSpinn
 
             // onclick event 
             element.bind('mouseup', function(event) {
-                if (scope.mObj) {
-                    scope.drawSet();
-                    var pW = ctx.canvas.width;
-                    var pH = ctx.canvas.height;
-                    scope.mObj.setSize(pW, pH);
+                if (!ConfigService.isAlreadyDraw) {
+                    ConfigService.isAlreadyDraw = true;
+                } else {
+                    console.log('x, y = ', event.clientX, event.clientY);
+                    scope.$apply(function() {
+                        // $scope.data.myVar = "Another value";
+                        ConfigService.setMouse(event.clientX, event.clientY);
+                    });
+                    // setTimeout(function() {
+                    // });
                 };
                 // lock body and start spin
                 var endedThreads = 0;
@@ -49,7 +54,7 @@ app.directive('paint', ['$rootScope', 'ThreadService', 'ConfigService', 'usSpinn
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         element.bind('click', function(event) {
-            ctx.clearRect ( 0 , 0 , ctx.canvas.width, ctx.canvas.height );
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             var threadInfo = ThreadService.getThreadData();
             threadInfo.sort(function(a, b) {
                 if (a.id < b.id) return -1;
