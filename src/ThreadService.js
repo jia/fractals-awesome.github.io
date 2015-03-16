@@ -4,7 +4,7 @@ app.service('ThreadService', ['$rootScope', 'ConfigService', function($rootScope
     var self = this;
     var threadDataInfo = [];
     var x_pixels = ConfigService.x_pixels;
-    var poolSize = Math.ceil(ConfigService.ctx_w / x_pixels);
+    var poolSize = Math.ceil(ConfigService.ctx_h / x_pixels);
 
     self.work = function() {
         threadDataInfo = [];
@@ -33,7 +33,10 @@ app.service('ThreadService', ['$rootScope', 'ConfigService', function($rootScope
                 'height': ConfigService.ctx_h,
                 'isZoom': ConfigService.isAlreadyDraw,
                 'mX': ConfigService.mouseClickX,
-                'mY': ConfigService.mouseClickY
+                'mY': ConfigService.mouseClickY,
+                'isMandelbrot' : ConfigService.isMandelbrotSet,
+                'cx' : ConfigService.cx,
+                'cy' : ConfigService.cy,
             };
             // Start a new thread
             worker.postMessage(data);

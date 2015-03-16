@@ -23,11 +23,11 @@ function Complex(real, imagine) {
 // Class implemens base logic for all fractals 
 function Fractal() {
         // const
-        this.leftX = -2.1;
-        this.rightX = 2.1;
+        this.leftX = -2.6;
+        this.rightX = 2.6;
 
         this.infinity = 255.0;
-        this.maxTime = 250;
+        this.maxTime = 255;
         // Variables
         this.sizeX = 0;
         this.sizeY = 0;
@@ -55,7 +55,7 @@ function Fractal() {
                 'g': step > 255 ? 255 : step,
                 'b': (step * 4 > 255) ? 255 : step * 4
             }
-        }
+        };
         this.constructor.prototype.setSize = function(pX, pY) {
             this.sizeX = pX;
             this.sizeY = pY;
@@ -87,23 +87,8 @@ function Fractal() {
             this.downLeftCorner = newDownLeftCorner;
             this.upRightCorner = newUpRightCorner;
         };
-    }
-    // Logic of Mandelbrot set : Fractal
-function Mandelbrot() {
-    // Variables
-    this.image = [];
-    // Methods
-    this.constructor.prototype.calculateStep = function(number) {
-        var z = new Complex(0, 0);
-        for (var i = 0; i < this.maxTime; i++) {
-            if (z.magnitude > this.infinity) {
-                return i;
-            };
-            z = z.mult(z).plus(number);
-        };
-        return this.maxTime;
-    };
-    this.constructor.prototype.toImage = function(x, y) {
+
+        this.constructor.prototype.toImage = function(x, y) {
             this.isAlreadyDraw = true;
             var planeX = x;
             var planeY = this.sizeY - y - 1;
@@ -115,11 +100,57 @@ function Mandelbrot() {
                 'x': x,
                 'y': y
             };
-        }
+        };
+    }
+    // Logic of Mandelbrot set : Fractal
+    function Mandelbrot() {
+        // Variables
+        this.image = [];
+        // Methods
+        this.constructor.prototype.calculateStep = function(number) {
+            var z = new Complex(0, 0);
+            for (var i = 0; i < this.maxTime; i++) {
+                if (z.magnitude > this.infinity) {
+                    return i;
+                };
+                z = z.mult(z).plus(number);
+            };
+            return this.maxTime;
+        };
         // Call constructor
-    Fractal.call(this);
-    // Inheritance
-    this.constructor.prototype = Object.create(Fractal.prototype);
-};
+        Fractal.call(this);
+        // Inheritance
+        this.constructor.prototype = Object.create(Fractal.prototype);
+    };
 
+    // Julia fractal
+    function Julia() {
+        // Variables 
+        this.image = [];
+        var cX = 0.3;
+        var cY = 0.4;
+        // Methods
+        this.constructor.prototype.calculateStep = function(number) {
+            var z = number;
+            var c = new Complex(this.cX, this.cY);
+            for (var i = 0; i < this.maxTime; i++) {
+                if (z.magnitude > this.infinity) {
+                    return i;
+                };
+                z = z.mult(z).plus(c);
+            };
+            return this.maxTime;
+        };
+
+        this.constructor.prototype.setC = function(cX, cY) {
+            this.cX = cX;
+            this.cY = cY;
+        };
+        // Call constructor
+        Fractal.call(this);
+        // Inheritance
+        this.constructor.prototype = Object.create(Fractal.prototype);
+    };
+// Global objects
 var glMB = new Mandelbrot();
+var glJ = new Julia();
