@@ -10,5 +10,5 @@ JS implementation of Mandelbrot and Julia Set using Workers(concurrency)
 
 #### Live demo
 
-You can view this project on http://learn-fractals.github.io/
+You can view this project on http://fractals-awesome.github.io/
 
